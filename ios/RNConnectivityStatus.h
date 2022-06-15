@@ -11,7 +11,6 @@
 #import <React/RCTUtils.h>
 
 #import <CoreLocation/CoreLocation.h>
-#import <CoreBluetooth/CoreBluetooth.h>
 
 @interface RNConnectivityStatus : RCTEventEmitter <RCTBridgeModule, CLLocationManagerDelegate, CBCentralManagerDelegate>
 

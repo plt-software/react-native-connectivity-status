@@ -1,6 +1,5 @@
 package com.nearit.connectivity;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,32 +31,6 @@ public class RNConnectivityStatusModule extends ReactContextBaseJavaModule {
     // Location permission status
     private static final String PERMISSION_LOCATION_GRANTED = "Location.Permission.Granted.Always";
     private static final String PERMISSION_LOCATION_DENIED = "Location.Permission.Denied";
-
-    private final BroadcastReceiver mBtReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-
-            if (action != null && action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
-                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
-                        BluetoothAdapter.ERROR);
-                boolean active = false;
-                switch (state) {
-                    case BluetoothAdapter.STATE_OFF:
-                        active = false;
-                        break;
-                    case BluetoothAdapter.STATE_ON:
-                        active = true;
-                        break;
-                }
-
-                final WritableMap eventMap = new WritableNativeMap();
-                eventMap.putString(EVENT_TYPE, "bluetooth");
-                eventMap.putBoolean(EVENT_STATUS, active);
-                getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(RN_CONNECTIVITY_STATUS_TOPIC, eventMap);
-            }
-        }
-    };
 
     private final BroadcastReceiver mLocationReceiver = new BroadcastReceiver() {
         @Override
@@ -98,22 +71,9 @@ public class RNConnectivityStatusModule extends ReactContextBaseJavaModule {
     public void initialize() {
         super.initialize();
 
-        final IntentFilter btFilter = new IntentFilter();
-        btFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-        reactContext.getApplicationContext().registerReceiver(mBtReceiver, btFilter);
-
         final IntentFilter locationFilter = new IntentFilter();
         locationFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
         reactContext.getApplicationContext().registerReceiver(mLocationReceiver, locationFilter);
-    }
-
-    @ReactMethod
-    public void isBluetoothEnabled(final Promise promise) {
-        try {
-            promise.resolve(checkBluetooth());
-        } catch (Exception e) {
-            promise.reject("BLE_CHECK_ERROR", e.getMessage());
-        }
     }
 
     @ReactMethod
@@ -141,10 +101,6 @@ public class RNConnectivityStatusModule extends ReactContextBaseJavaModule {
     /**
      * Private methods
      */
-    private boolean checkBluetooth() {
-        return BluetoothAdapter.getDefaultAdapter() != null && BluetoothAdapter.getDefaultAdapter().isEnabled();
-    }
-
     private boolean checkLocationServices() {
         final LocationManager locationManager = (LocationManager) getReactApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         return (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))

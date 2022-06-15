@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
   s.name         = "react-native-connectivity-status"
-  s.version      = "1.5.1"
-  s.summary      = "A ReactNative module to check Bluetooth and Location status on Android and iOS"
+  s.version      = "2.0.0"
+  s.summary      = "A ReactNative module to check Location status on Android and iOS"
   s.description  = <<-DESC
-                  A ReactNative module to check Bluetooth and Location status on Android and iOS
+                  A ReactNative module to check Location status on Android and iOS
                    DESC
   s.homepage     = "https://www.npmjs.com/package/react-native-connectivity-status"
   s.license      = { :type => "MIT", :file => "LICENSE.md" }
