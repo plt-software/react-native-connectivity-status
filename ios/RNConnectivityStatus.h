@@ -12,7 +12,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-@interface RNConnectivityStatus : RCTEventEmitter <RCTBridgeModule, CLLocationManagerDelegate, CBCentralManagerDelegate>
+@interface RNConnectivityStatus : RCTEventEmitter <RCTBridgeModule, CLLocationManagerDelegate>
 
 #define RN_CONNECTIVITY_STATUS_TOPIC @"RNConnectivityStatus"
 #define EVENT_TYPE @"eventType"
